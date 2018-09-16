@@ -240,6 +240,7 @@ MonoBehaviour:
   collisionRetical: {fileID: 1121803163297312, guid: ad13c551162b3134bb72f76aba69922b,
     type: 2}
   player: {fileID: 1133582012}
+  timeBeforeCollision: 5
   gate: 0
 --- !u!1 &307946448
 GameObject:
