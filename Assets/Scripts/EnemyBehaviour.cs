@@ -4,31 +4,26 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-	public float Speed;
-	
-	
-	[SerializeField] private GameObject player;
-	
-	
-	
-	// Use this for initialization
-	void Start () {
-		
-		player = GameObject.FindGameObjectWithTag("Player");
+    public float Speed { get; set; }
+    public Vector3 Target { get; set; }
 
-		var pixelPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-		var offset = new Vector2(player.transform.localPosition.x - pixelPos.x, player.transform.localPosition.y - pixelPos.y);
-		var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
-		
-		transform.rotation = Quaternion.Euler(90f, 0f, angle);
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
+    [SerializeField] private Vector3 direction;
 
-		transform.position += transform.right * (Speed * 5f) * Time.deltaTime;
 
-	}
+    private void Start()
+    {
+        direction = Target - transform.position;
+        direction.y = 0f;
+        
+        Debug.DrawRay(transform.position, direction, Color.green, 100f);
+        
+        transform.right = direction;
+        transform.Rotate(90f, transform.localRotation.y, 0f);
+    }
+
+
+    private void FixedUpdate()
+    {
+        transform.position += direction.normalized * Speed * Time.fixedDeltaTime;
+    }
 }

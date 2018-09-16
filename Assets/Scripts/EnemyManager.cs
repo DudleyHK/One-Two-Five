@@ -20,10 +20,6 @@ using UnityEngine.XR.WSA.Persistence;
 */
 
 
-
-
-
-
 public class EnemyManager : MonoBehaviour
 {
     public static Quaternion ObjectRotation
@@ -36,22 +32,22 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private GameObject collisionRetical;
     [SerializeField] private GameObject player;
 
+    [SerializeField] private float timeBeforeCollision = 5f;
+
     [SerializeField] private bool gate = false;
 
-    
+
     private List<GameObject> collisionReticalList = new List<GameObject>();
     private SpriteRenderer collisionReticalRenderer;
 
     private Vector3 enemyPos;
     private Vector3 collisionReticalPosition;
-    
+
     private float offsetX;
     private float offsetY;
     private float timer = 0f;
     private float maxTime = 60f;
     private float offset = 10f;
-
-    
 
 
     private void Start()
@@ -87,7 +83,7 @@ public class EnemyManager : MonoBehaviour
         var clone = Instantiate(collisionRetical, new Vector3(pos.x, 0f, pos.z), ObjectRotation);
 
         collisionReticalPosition = pos;
-        
+
         collisionReticalList.Add(clone);
 
         debugText.text = "collision point (world position) -" + pos;
@@ -107,48 +103,48 @@ public class EnemyManager : MonoBehaviour
 
     private void InitEnemies()
     {
-        Vector3 enemyA;
-        
-        enemyPos = Vector3.zero;
-
-        StartCoroutine(SpawnPosition());
+        StartCoroutine(EnemySpawn());
     }
 
 
-
-
-    private IEnumerator SpawnPosition()
+    private IEnumerator EnemySpawn()
     {
         bool valid = false;
         while (!valid)
         {
             var x = Random.Range(0f - offsetX, Camera.main.pixelWidth + offsetX);
             var y = Random.Range(0f - offsetY, Camera.main.pixelHeight + offsetY);
-            
-            enemyPos = Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
-            
-            // intersection
 
-            valid = true;
+            if (x >= 0f && x <= Camera.main.pixelWidth && 
+                y >= 0f && y <= Camera.main.pixelHeight)
+            {
+                valid = false;
+            }
+            else
+            {
+                enemyPos = Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
+                valid = true;
+            }
             
             yield return null;
         }
 
         InstantiateEnemy(enemyPos);
-        
+
         yield return true;
     }
-    
-    
+
+
     private void InstantiateEnemy(Vector3 _pos)
     {
-        var dist = collisionReticalPosition - enemyPos;
-        var speed = dist / 10f;
+        var dist = Vector3.Distance(collisionReticalPosition, enemyPos);
+        var speed = dist / timeBeforeCollision;
+
 
         var inst = Instantiate(enemyPrefab, new Vector3(_pos.x, 0f, _pos.z), ObjectRotation);
-        inst.GetComponent<EnemyBehaviour>().Speed = speed.magnitude;
-                
-        Debug.Log("Enemy A ~~~ \n - Pos: " + enemyPos + " \n - Dist: " + dist + " \n Speed: " + speed.magnitude);
-    }
+        inst.GetComponent<EnemyBehaviour>().Speed = speed;
+        inst.GetComponent<EnemyBehaviour>().Target = collisionReticalPosition;
 
+        Debug.Log("Enemy A ~~~ \n - Pos: " + enemyPos + " \n - Dist: " + dist + " \n Speed: " + speed);
+    }
 }

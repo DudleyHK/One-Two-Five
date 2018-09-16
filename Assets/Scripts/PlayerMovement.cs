@@ -40,10 +40,8 @@ public class PlayerMovement : MonoBehaviour
             var offset = new Vector2(targetPos.x - pixelPos.x, targetPos.y - pixelPos.y);
             var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
 
-
             transform.rotation = Quaternion.Euler(90f, 0f, angle);
             transform.position += transform.right * speed * Time.deltaTime;
-            
         }
     }
 
