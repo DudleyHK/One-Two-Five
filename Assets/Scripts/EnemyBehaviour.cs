@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public float Speed { get; set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
     public Vector3 Target { get; set; }
+    public float Speed { get; set; }
 
     [SerializeField] private Vector3 direction;
 
@@ -19,6 +20,8 @@ public class EnemyBehaviour : MonoBehaviour
         
         transform.right = direction;
         transform.Rotate(90f, transform.localRotation.y, 0f);
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 

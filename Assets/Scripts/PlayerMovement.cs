@@ -50,8 +50,8 @@ public class PlayerMovement : MonoBehaviour
         targetPos = _mouse;
         move = _move;
         
-       if(move)
-           Debug.Log("mouse pos " + _mouse);
+       //if(move)
+       //    Debug.Log("mouse pos " + _mouse);
     }
 
 
