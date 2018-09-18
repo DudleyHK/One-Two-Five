@@ -1,11 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Channels;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR.WSA.Persistence;
-
 
 /* // ENEMIES //
 - Set a collision point to the position of the player.
@@ -34,12 +30,15 @@ public enum Sides
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private Text debugText;
+    [SerializeField] private Text enemySpawnIntervalsText;
+    
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject collisionRetical;
     [SerializeField] private GameObject player;
 
     [SerializeField] private int attackEnemiesNumber = 2;
     [SerializeField] private float timeBeforeCollision = 5f;
+    [SerializeField] private float spawnIntervals = 60f;
 
     [SerializeField] private bool gate = false;
 
@@ -49,7 +48,7 @@ public class EnemyManager : MonoBehaviour
     private SpriteRenderer enemySpriteRenderer;
     private Vector3 collisionReticalPosition;
     private float timer = 0f;
-    private float maxTime = 60f;
+    
     private float offset = 50f;
     private float maxSpawnDist = 5f;
 
@@ -59,10 +58,18 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         reticalSpriteRenderer = collisionRetical.GetComponent<SpriteRenderer>();
+        if (reticalSpriteRenderer == null)
+        {
+            Debug.LogWarning("Warning: reticalSpriteRenderer not found!");
+        }
+        
         enemySpriteRenderer = enemyPrefab.GetComponent<SpriteRenderer>();
+        if (enemySpriteRenderer == null)
+        {
+            Debug.LogWarning("Warning: enemySpriteRenderer not found!");
+        }
 
-
-        timer = maxTime;
+        timer = spawnIntervals;
     }
 
 
@@ -70,21 +77,46 @@ public class EnemyManager : MonoBehaviour
     {
         if (gate || timer <= 0f)
         {
-            SpawnPoint();
+            InitCollisionPoint();
             SpawnEnemies();
 
             gate = false;
+            timer = spawnIntervals;
         }
         else
         {
             timer -= Time.deltaTime;
         }
+
+        enemySpawnIntervalsText.text = "Enemy Spawn Intervals Timer: " + timer.ToString();
     }
 
+    private void InitCollisionPoint()
+    {
+        var reticalOffsetX = reticalSpriteRenderer.sprite.bounds.size.x + offset;
+        var reticalOffsetY = reticalSpriteRenderer.sprite.bounds.size.y + offset;
 
+        var x = Random.Range(0f + reticalOffsetX, Camera.main.pixelWidth - reticalOffsetX);
+        var y = Random.Range(0f + reticalOffsetY, Camera.main.pixelHeight - reticalOffsetY);
+
+        var pos = Random.Range(0f, 1f) <= 0.3f
+            ? player.transform.localPosition
+            : Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
+        var clone = Instantiate(collisionRetical, new Vector3(pos.x, 0f, pos.z), Quaternion.Euler(90f, 0f, 0f));
+
+        collisionReticalPosition = pos;
+
+        collisionReticalList.Add(clone);
+
+        debugText.text = "collision point (world position) -" + pos;
+        Debug.Log(debugText.text);
+    }
+
+    
+    
     private void SpawnEnemies()
     {
-        StartCoroutine(SelectSides(result =>
+        StartCoroutine(SelectScreenSides(result =>
         {
             if (result)
             {
@@ -141,8 +173,9 @@ public class EnemyManager : MonoBehaviour
         }));
     }
 
-
-    private IEnumerator SelectSides(System.Action<bool> _flag)
+    
+    
+    private IEnumerator SelectScreenSides(System.Action<bool> _flag)
     {
         bool complete = false;
 
@@ -184,63 +217,7 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-    private void SpawnPoint()
-    {
-        var reticalOffsetX = reticalSpriteRenderer.sprite.bounds.size.x + offset;
-        var reticalOffsetY = reticalSpriteRenderer.sprite.bounds.size.y + offset;
-
-        var x = Random.Range(0f + reticalOffsetX, Camera.main.pixelWidth - reticalOffsetX);
-        var y = Random.Range(0f + reticalOffsetY, Camera.main.pixelHeight - reticalOffsetY);
-
-        var pos = Random.Range(0f, 1f) <= 0.3f
-            ? player.transform.localPosition
-            : Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
-        var clone = Instantiate(collisionRetical, new Vector3(pos.x, 0f, pos.z), Quaternion.Euler(90f, 0f, 0f));
-
-        collisionReticalPosition = pos;
-
-        collisionReticalList.Add(clone);
-
-        debugText.text = "collision point (world position) -" + pos;
-        Debug.Log(debugText.text);
-    }
-
-
-    private void InitEnemies()
-    {
-        enemyList.Clear();
-
-        StartCoroutine(InstantiateAttackEnemies());
-    }
-
-
-    private IEnumerator InstantiateAttackEnemies()
-    {
-        int i = 0;
-
-        StartCoroutine(EnemySpawn(n =>
-        {
-            if (n) i++;
-        }));
-
-        while (enemyList.Count <= attackEnemiesNumber)
-        {
-            if (enemyList.Count != i)
-            {
-                StartCoroutine(EnemySpawn(n =>
-                {
-                    if (n) i++;
-                }));
-            }
-
-            Debug.Log("Enemy Count - " + enemyList.Count + " and i - " + i);
-            yield return null;
-        }
-
-        yield return true;
-    }
-
-
+    
     private bool Offscreen(float _x, float _y)
     {
         if (_x >= 0f && _x <= Camera.main.pixelWidth &&
@@ -249,53 +226,6 @@ public class EnemyManager : MonoBehaviour
             return false;
         }
         return true;
-    }
-
-
-    private IEnumerator EnemySpawn(System.Action<bool> _result)
-    {
-        Vector3 enemyWorldPos = Vector3.zero;
-        bool valid = false;
-
-        var enemyOffsetX = enemySpriteRenderer.sprite.bounds.size.x + offset;
-        var enemyOffsetY = enemySpriteRenderer.sprite.bounds.size.y + offset;
-
-        while (!valid)
-        {
-            var x = Random.Range(0f - enemyOffsetX, Camera.main.pixelWidth + enemyOffsetX);
-            var y = Random.Range(0f - enemyOffsetY, Camera.main.pixelHeight + enemyOffsetY);
-
-            if (x >= 0f && x <= Camera.main.pixelWidth &&
-                y >= 0f && y <= Camera.main.pixelHeight)
-            {
-                Debug.Log("Position inside Screen - " + ScreenToWorld(new Vector3(x, y, 0f)));
-                valid = false;
-            }
-            else if (enemyList.Count > 0)
-            {
-                var dist = Vector3.Distance(enemyList[enemyList.Count - 1].transform.position,
-                    ScreenToWorld(new Vector3(x, y, 0f)));
-
-                if (dist >= maxSpawnDist)
-                {
-                    Debug.Log("Distance is " + dist);
-                    valid = false;
-                }
-            }
-            else
-            {
-                enemyWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
-                valid = true;
-            }
-
-            _result(false);
-            yield return null;
-        }
-
-        InstantiateEnemy(enemyWorldPos);
-
-        _result(true);
-        yield return true;
     }
 
 
@@ -315,11 +245,5 @@ public class EnemyManager : MonoBehaviour
                   " \n - Dist: " + dist +
                   " \n Speed: " + speed +
                   " \n Target: " + collisionReticalPosition);
-    }
-
-
-    private Vector3 ScreenToWorld(Vector3 _p)
-    {
-        return Camera.main.ScreenToWorldPoint(new Vector3(_p.x, _p.y, 0f));
     }
 }

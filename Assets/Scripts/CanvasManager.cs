@@ -8,8 +8,9 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
-    public Canvas mainCanvas;
-    public Text screenResolution;
+
+    [SerializeField] Canvas mainCanvas;
+    [SerializeField] Text screenResolution;
     
 
 
