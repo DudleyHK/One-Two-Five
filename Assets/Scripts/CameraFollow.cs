@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.UIElements;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -9,9 +10,12 @@ public class CameraFollow : MonoBehaviour
 
     
     
-    private void Update()
+    private void FixedUpdate()
     {
         var targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);
+        
+        transform.position = TweenLibrary.EaseInOutLinear(transform.position, targetPos, speed * Time.fixedDeltaTime);
+
+
     }
 }

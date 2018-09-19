@@ -172,6 +172,21 @@ Prefab:
       propertyPath: m_Constraints
       value: 112
       objectReference: {fileID: 0}
+    - target: {fileID: 114872252857815168, guid: 851cd62d61063264ebd8b9b14fd090c7,
+        type: 2}
+      propertyPath: speed
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114872252857815168, guid: 851cd62d61063264ebd8b9b14fd090c7,
+        type: 2}
+      propertyPath: reverse
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114872252857815168, guid: 851cd62d61063264ebd8b9b14fd090c7,
+        type: 2}
+      propertyPath: turn
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 851cd62d61063264ebd8b9b14fd090c7, type: 2}
   m_IsPrefabAsset: 0
@@ -243,6 +258,16 @@ Prefab:
       propertyPath: debugText
       value: 
       objectReference: {fileID: 1711330147}
+    - target: {fileID: 114368790716601414, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+        type: 2}
+      propertyPath: timeBeforeCollision
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114368790716601414, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e8d8ebb7a711ee4b878403d2c019c9e, type: 2}
   m_IsPrefabAsset: 0
