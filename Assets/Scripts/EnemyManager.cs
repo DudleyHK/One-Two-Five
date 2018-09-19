@@ -88,7 +88,7 @@ public class EnemyManager : MonoBehaviour
             timer -= Time.deltaTime;
         }
 
-        enemySpawnIntervalsText.text = "Enemy Spawn Intervals Timer: " + timer.ToString();
+        enemySpawnIntervalsText.text = "Enemy Spawn Intervals Timer: " + timer;
     }
 
     private void InitCollisionPoint()

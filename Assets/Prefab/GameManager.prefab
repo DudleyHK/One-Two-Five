@@ -21,12 +21,13 @@ GameObject:
   - component: {fileID: 4315659109343136}
   - component: {fileID: 114605331145229242}
   - component: {fileID: 114368790716601414}
+  - component: {fileID: 114430630690847348}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4315659109343136
 Transform:
@@ -60,9 +61,23 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 0}
   attackEnemiesNumber: 2
-  timeBeforeCollision: 5
+  timeBeforeCollision: 2.3
   spawnIntervals: 5
   gate: 0
+--- !u!114 &114430630690847348
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b250df5c34630324089b9317c05e0a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectablePrefabs:
+  - {fileID: 1377601854721476, guid: 155e28c9c1bc2a744bbeed34735065ad, type: 2}
+  collectableList: []
 --- !u!114 &114605331145229242
 MonoBehaviour:
   m_ObjectHideFlags: 1

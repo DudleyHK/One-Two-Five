@@ -16,7 +16,7 @@ public class EnemyBehaviour : MonoBehaviour
         direction = Target - transform.position;
         direction.y = 0f;
         
-        Debug.DrawRay(transform.position, direction, Color.green, 100f);
+        Debug.DrawRay(transform.position, direction, Color.green, 4f);
         
         transform.right = direction;
         transform.Rotate(90f, transform.localRotation.y, 0f);
