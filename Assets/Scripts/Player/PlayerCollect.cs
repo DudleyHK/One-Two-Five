@@ -25,7 +25,7 @@ public class PlayerCollect : MonoBehaviour
             if (collected != null)
                 collected(script.Type, script.Score, script.ID);
             
-            Debug.Log("Collected type " + script.Type + " at position " + _other.transform.position);
+            // Debug.Log("Collected type " + script.Type + " at position " + _other.transform.position);
         }
     }
 }

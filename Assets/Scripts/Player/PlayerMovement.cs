@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +13,19 @@ public class PlayerMovement : MonoBehaviour
     public float reverse = 100f;
     public float turn = 5f;
 
-    [SerializeField] enum Direction {None, Forward, Reverse }
+    [SerializeField]
+    enum Direction
+    {
+        None,
+        Forward,
+        Reverse
+    }
+
     [SerializeField] Camera mainCamera;
     [SerializeField] Text debugText;
 
-    private Vector3 targetPos;
+    private Vector3 ppTargetPos;
+    private Vector3 wpTargetPos;
 
 
     private void OnEnable()
@@ -36,71 +45,63 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         var direction = Direction.None;
-        
+
         if (move)
         {
-            var targetWorldPos = Camera.main.ScreenToWorldPoint(targetPos);
+            wpTargetPos = Camera.main.ScreenToWorldPoint(ppTargetPos);
 
-            // check where the click is. 
-            var signedAngle = Vector3.SignedAngle(transform.localPosition, targetWorldPos, transform.forward);
-            var pos = Mathf.Cos(signedAngle); // zAxis
-            
-            
-            Debug.Log("Angle of click from player is " + signedAngle);
-            
-            
-            
-            // Position
-            //if (transform.right.z > (transform.right - transform.position).normalized.z)
-            //{
-                direction = Direction.Forward;
-            //}
-            //else
-            //{
-            //    direction = Direction.Reverse;
-            //    Debug.DrawRay(transform.position, transform.right * -10f, Color.red, 1f);
-            //}
 
-            
-
-            if (direction != Direction.None)
-            {
-                var adjustSpeed = direction == Direction.Forward ? speed : reverse;
-                
-                transform.position = TweenLibrary.EaseInOutLinear(transform.position,
-                    new Vector3(targetWorldPos.x, transform.position.y, targetWorldPos.z), adjustSpeed * Time.fixedDeltaTime);
-            }
-            else
-            {
-                Debug.LogWarning("Warning: Direction " + direction + " invalid!");
-            }
-            
-            // Rotation
-            var pixelPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-            var offset = new Vector2(targetPos.x - pixelPos.x, targetPos.y - pixelPos.y);
-            var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
-
-            transform.rotation = Quaternion.Euler(90f, 0f, angle);
+             Rotate();
+            Movement();
         }
+    }
+
+    private void Movement()
+    {
+        transform.position = TweenLibrary.EaseInOutLinear(transform.position,
+            new Vector3(wpTargetPos.x, transform.position.y, wpTargetPos.z),
+            speed * Time.fixedDeltaTime);
+    }
+
+    
+    
+    private void Rotate()
+    {
+        // Current Angle
+        var currOffset = new Vector3(transform.position.x - transform.forward.x, 0f,
+            transform.position.z - transform.forward.z);
+        var currAngle = Mathf.Atan2(currOffset.z, currOffset.x) * Mathf.Rad2Deg;
+
+        // Target Angle
+        var offset = new Vector3(wpTargetPos.x - transform.position.x, 0f,
+            wpTargetPos.z - transform.position.z);
+        var angle = Mathf.Atan2(offset.z, offset.x) * Mathf.Rad2Deg;
+        
+        var newAngle = Mathf.LerpAngle(currAngle, angle, turn * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Euler(90f, 0f,newAngle );
+
+
+
+
+
+       
+        Debug.DrawRay(transform.position, wpTargetPos, Color.cyan, 3f);
     }
 
     private void HandleMouseInput(Vector3 _mouse, bool _move)
     {
-        targetPos = _mouse;
+        ppTargetPos = _mouse;
         move = _move;
-        
-       //if(move)
-       //    Debug.Log("mouse pos " + _mouse);
     }
 
 
     private void HandleInput(Touch _touch)
     {
-        targetPos =  _touch.position;
+        ppTargetPos = _touch.position;
 
-        debugText.text = "touch input pos - " + targetPos;
-        Debug.Log("touch input pos - " + targetPos);
-        
+        debugText.text = "touch input pos - " + ppTargetPos;
+        Debug.Log("touch input pos - " + ppTargetPos);
+
 
         if (_touch.phase == TouchPhase.Began)
         {

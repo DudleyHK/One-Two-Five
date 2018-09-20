@@ -55,7 +55,7 @@ public class CollectablesManager : MonoBehaviour
             var script = collectable.GetComponent<Collectable>();
             script.ID = collectableList.Count;
             
-            Debug.Log("ID - " + script.ID);
+          //  Debug.Log("ID - " + script.ID);
 
             collectableList.Add(script);
             timer = dropIntervalTime;

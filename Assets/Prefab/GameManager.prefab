@@ -48,7 +48,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1421810993234890}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 632bc1f02c82a8e45a373be783250eb2, type: 3}
   m_Name: 
@@ -61,7 +61,7 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 0}
   attackEnemiesNumber: 2
-  timeBeforeCollision: 2.3
+  timeBeforeCollision: 1.5
   spawnIntervals: 5
   gate: 0
 --- !u!114 &114430630690847348
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1421810993234890}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b250df5c34630324089b9317c05e0a32, type: 3}
   m_Name: 
