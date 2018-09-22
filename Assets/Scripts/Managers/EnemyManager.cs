@@ -50,7 +50,6 @@ public class EnemyManager : MonoBehaviour
     private float timer = 0f;
     
     private float offset = 50f;
-    private float maxSpawnDist = 5f;
 
     private Sides[] sides;
 

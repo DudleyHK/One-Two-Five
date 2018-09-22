@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
     public delegate void HandleInput(Touch _touch);
     public static event HandleInput handleInput;
     
-    public delegate void HandleMouseInput(Vector3 _mousePixPos, bool _move);
+    public delegate void HandleMouseInput(Vector3 _mousePixPos, bool _move, bool _slow);
     public static event HandleMouseInput handleMouseInput;
 
     [SerializeField] Text debugText;
@@ -34,10 +34,8 @@ public class InputManager : MonoBehaviour
 
     private void MouseInput()
     {
-       
-        
         if (handleMouseInput != null)
-            handleMouseInput(Input.mousePosition, Input.GetMouseButton(0));
+            handleMouseInput(Input.mousePosition, Input.GetMouseButton(0), Input.GetMouseButtonUp(0));
     }
 
 
@@ -59,6 +57,7 @@ public class InputManager : MonoBehaviour
             case TouchPhase.Began: output = "Began"; break;
             case TouchPhase.Moved: output = "Moved"; break;
             case TouchPhase.Ended: output = "Ended"; break;
+            default: output = "None"; break;
         }
 
         debugText.text = output;
