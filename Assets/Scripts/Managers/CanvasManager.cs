@@ -8,7 +8,7 @@ public class CanvasManager : MonoBehaviour
 {
     [SerializeField] private Canvas mainCanvas;
     [SerializeField] private GameObject items;
-    
+
     [SerializeField] private Text screenResolution;
     [SerializeField] private Toggle HUDActive;
     [SerializeField] private Toggle kamakaziEnemies;
@@ -25,12 +25,14 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private Text chaserIntervalLabel;
     [SerializeField] private Text kamakaziIntervalLabel;
     [SerializeField] private Text collectableIntervalLabel;
+    
+    private bool collectablesActive = false;
 
 
     private void OnEnable()
     {
         HUDActive.onValueChanged.AddListener(ToggleHUD);
-        
+
         kamakaziEnemies.onValueChanged.AddListener(ToggleKamakaziEnemies);
         chaserEnemies.onValueChanged.AddListener(ToggleChaserEnemies);
         collectables.onValueChanged.AddListener(ToggleCollectables);
@@ -44,7 +46,7 @@ public class CanvasManager : MonoBehaviour
     private void OnDisable()
     {
         HUDActive.onValueChanged.RemoveAllListeners();
-        
+
         kamakaziEnemies.onValueChanged.RemoveAllListeners();
         chaserEnemies.onValueChanged.RemoveAllListeners();
         collectables.onValueChanged.RemoveAllListeners();
@@ -54,7 +56,6 @@ public class CanvasManager : MonoBehaviour
         kamakaziInterval.onValueChanged.RemoveAllListeners();
         collectableInterval.onValueChanged.RemoveAllListeners();
     }
-
 
     private void Start()
     {
@@ -69,7 +70,7 @@ public class CanvasManager : MonoBehaviour
         chaserIntervalLabel.text = chaserInterval.value.ToString();
         kamakaziIntervalLabel.text = kamakaziInterval.value.ToString();
         collectableIntervalLabel.text = collectableInterval.value.ToString();
-        
+
     }
 
 
