@@ -16,7 +16,7 @@ public class MapData : MonoBehaviour
     {
         if (spriteRenderer == null)
         {
-            Debug.LogWarning("Warning: Map spriteRenderer object missing!");
+            Debug.LogWarning("Warning: Map SpriteRenderer object missing!");
             return;
         }
 

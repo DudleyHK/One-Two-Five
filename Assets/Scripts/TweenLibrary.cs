@@ -7,6 +7,15 @@ using UnityEngineInternal;
 
 public class TweenLibrary : ScriptableObject
 {
+        
+    public static Vector2 Parabola(Vector2 start, Vector2 end, float height, float t)
+    {
+        return Vector2.left;
+    }
+    
+    
+    
+    
     public static Vector3 LinearTween(Vector3 _scalar, Vector3 _target, float _change = .1f)
     {
         return _scalar + (_target - _scalar) * _change;

@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Camera mainCamera;
     [SerializeField] Text debugText;
+    [SerializeField] private float deadzone = 5f;
 
     private Vector3 ppTargetPos;
     private Vector3 wpTargetPos;
@@ -61,8 +62,15 @@ public class PlayerMovement : MonoBehaviour
         {
             wpTargetPos = Camera.main.ScreenToWorldPoint(ppTargetPos);
 
-            Rotate();
-            Movement();
+            if (Vector3.Distance(transform.position, wpTargetPos) < deadzone)
+            {
+               // StartCoroutine(DelayCoroutine(StopBike(), 2f));
+            }
+            else
+            {
+                Rotate();
+                Movement();
+            }
         }
 
         if (slow)
@@ -96,16 +104,28 @@ public class PlayerMovement : MonoBehaviour
         transform.eulerAngles = currentAngle;
     }
 
+    
+    private IEnumerator DelayCoroutine(IEnumerator _func, float _t)
+    {
+        Debug.Log("Wating to Delay Func");
+        yield return new WaitForSeconds(_t);
+
+        Debug.Log("Func Run");
+        StartCoroutine(_func);
+
+        yield return true;
+    }
+
 
     private IEnumerator StopBike()
     {
-        var d = damping;
-        var rate = d / 2f;
+        var temp = damping;
+        var rate = temp / 2f;
         
-        while (d >= 0f)
+        while (temp >= 0f)
         {
-            d -= rate * Time.fixedDeltaTime;
-            transform.position += transform.right * d * Time.fixedDeltaTime;
+            temp -= rate * Time.fixedDeltaTime;
+            transform.position += transform.right * temp * Time.fixedDeltaTime;
 
             yield return false;
         }

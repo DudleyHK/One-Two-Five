@@ -14,7 +14,5 @@ public class CameraFollow : MonoBehaviour
         var targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
         
         transform.position = TweenLibrary.EaseInOutLinear(transform.position, targetPos, speed * Time.fixedDeltaTime);
-
-
     }
 }

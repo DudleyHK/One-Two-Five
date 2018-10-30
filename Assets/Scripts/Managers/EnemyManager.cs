@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,26 +30,44 @@ public enum Sides
 
 public class EnemyManager : MonoBehaviour
 {
+    public enum Type
+    {
+        None,
+        Chaser,
+        Kamakazi
+    }
+
+
+    public static bool KamakaziActive = true;
+    public static bool ChaserActive = true;
+    [Range(0f, 15f)] public static float ChaserSpeed = 5f;
+    [Range(1f, 300f)] public static float ChaserInterval = 10f;
+    [Range(1f, 300f)] public static float KamakaziInterval = 5f;
+
+
     [SerializeField] private Text debugText;
     [SerializeField] private Text enemySpawnIntervalsText;
-    
-    [SerializeField] private GameObject enemyPrefab;
+
+    [SerializeField] private GameObject kamakaziEnemyPrefab;
+    [SerializeField] private GameObject chaserEnemyPrefab;
     [SerializeField] private GameObject collisionRetical;
     [SerializeField] private GameObject player;
 
     [SerializeField] private int attackEnemiesNumber = 2;
     [SerializeField] private float timeBeforeCollision = 5f;
-    [SerializeField] private float spawnIntervals = 60f;
+
 
     [SerializeField] private bool gate = false;
+
 
     private List<GameObject> collisionReticalList = new List<GameObject>();
     private List<EnemyBehaviour> enemyList = new List<EnemyBehaviour>();
     private SpriteRenderer reticalSpriteRenderer;
     private SpriteRenderer enemySpriteRenderer;
     private Vector3 collisionReticalPosition;
-    private float timer = 0f;
-    
+    private float kamakaziTimer = 0f;
+    private float chaserTimer = 0f;
+
     private float offset = 50f;
 
     private Sides[] sides;
@@ -61,34 +80,60 @@ public class EnemyManager : MonoBehaviour
         {
             Debug.LogWarning("Warning: reticalSpriteRenderer not found!");
         }
-        
-        enemySpriteRenderer = enemyPrefab.GetComponent<SpriteRenderer>();
+
+        enemySpriteRenderer = kamakaziEnemyPrefab.GetComponent<SpriteRenderer>();
         if (enemySpriteRenderer == null)
         {
             Debug.LogWarning("Warning: enemySpriteRenderer not found!");
         }
 
-        timer = spawnIntervals;
+        chaserTimer = ChaserInterval;
+        kamakaziTimer = KamakaziInterval;
     }
 
 
     private void Update()
     {
-        if (gate || timer <= 0f)
-        {
-            InitCollisionPoint();
-            SpawnEnemies();
+        UpdateChasers();
+        UpdateKamakazi();
+    }
 
-            gate = false;
-            timer = spawnIntervals;
+
+    private void UpdateChasers()
+    {
+        if (!ChaserActive) return;
+        if (chaserTimer <= 0f)
+        {
+            SpawnEnemies(Type.Chaser, 1);
+            chaserTimer = ChaserInterval;
+            ChaserActive = false;
         }
         else
         {
-            timer -= Time.deltaTime;
+            chaserTimer -= Time.deltaTime;
+        }
+    }
+
+
+    private void UpdateKamakazi()
+    {
+        if (!KamakaziActive) return;
+        if (gate || kamakaziTimer <= 0f)
+        {
+            InitCollisionPoint();
+            SpawnEnemies(Type.Kamakazi, attackEnemiesNumber);
+
+            gate = false;
+            kamakaziTimer = KamakaziInterval;
+        }
+        else
+        {
+            kamakaziTimer -= Time.deltaTime;
         }
 
-        enemySpawnIntervalsText.text = "Enemy Spawn Intervals Timer: " + timer;
+        enemySpawnIntervalsText.text = "Kamakazi Enemies Spawn Intervals Timer: " + kamakaziTimer;
     }
+
 
     private void InitCollisionPoint()
     {
@@ -111,9 +156,8 @@ public class EnemyManager : MonoBehaviour
         Debug.Log(debugText.text);
     }
 
-    
-    
-    private void SpawnEnemies()
+
+    private void SpawnEnemies(Type _type, int _numberOfEnemies)
     {
         StartCoroutine(SelectScreenSides(result =>
         {
@@ -123,10 +167,10 @@ public class EnemyManager : MonoBehaviour
                 var enemyOffsetY = enemySpriteRenderer.sprite.bounds.size.y + offset;
 
                 var screenPos = Vector2.zero;
-                
+
                 Debug.Log("Side 1  - " + sides[0] + " Side 2 - " + sides[1]);
 
-                for (int i = 0; i < attackEnemiesNumber; i++)
+                for (int i = 0; i < _numberOfEnemies; i++)
                 {
                     switch (sides[i])
                     {
@@ -139,41 +183,64 @@ public class EnemyManager : MonoBehaviour
                             screenPos.x = Random.Range(0f - enemyOffsetX, Camera.main.pixelWidth + enemyOffsetX);
                             screenPos.y = 0f - enemyOffsetY;
                             break;
-                        
+
                         case Sides.Left:
                             screenPos.x = 0f - enemyOffsetX;
                             screenPos.y = Random.Range(0f - enemyOffsetY, Camera.main.pixelHeight + enemyOffsetY);
                             break;
-                        
+
                         case Sides.Right:
                             screenPos.x = Camera.main.pixelWidth + enemyOffsetX;
                             screenPos.y = Random.Range(0f - enemyOffsetY, Camera.main.pixelHeight + enemyOffsetY);
                             break;
-                        
+
                         default:
                             Debug.LogWarning("Warning: Invalid Side (" + sides[i] + ") entered!");
                             break;
                     }
 
-                    
+
                     if (Offscreen(screenPos.x, screenPos.y))
                     {
                         var worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 0f));
-                        InstantiateEnemy(worldPos);
+
+
+                        if (_type == Type.Chaser)
+                        {
+                            InstantiateChaserEnemy(chaserEnemyPrefab, worldPos, player.transform, ChaserSpeed);
+
+                            Debug.Log("New Chaser Enemy ~~~ \n - Pos: " + worldPos +
+                                      " \n Speed: " + ChaserSpeed +
+                                      " \n Target: Player");
+                        }
+                        else if (_type == Type.Kamakazi)
+                        {
+                            var dist = Vector3.Distance(collisionReticalPosition, worldPos);
+                            var speed = dist / timeBeforeCollision;
+
+                            InstantiateEnemy(kamakaziEnemyPrefab, worldPos, collisionReticalPosition, speed);
+
+                            Debug.Log("New Kamakazi Enemy ~~~ \n - Pos: " + worldPos +
+                                      " \n - Dist: " + dist +
+                                      " \n Speed: " + speed +
+                                      " \n Target: " + collisionReticalPosition);
+                        }
+                        else
+                        {
+                            // Do nothing
+                        }
                     }
                     else
                     {
                         Debug.Log("Position (" + screenPos + ") NOT offscreen.");
                         i--;
                     }
-
                 }
             }
         }));
     }
 
-    
-    
+
     private IEnumerator SelectScreenSides(System.Action<bool> _flag)
     {
         bool complete = false;
@@ -216,7 +283,6 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-    
     private bool Offscreen(float _x, float _y)
     {
         if (_x >= 0f && _x <= Camera.main.pixelWidth &&
@@ -224,25 +290,29 @@ public class EnemyManager : MonoBehaviour
         {
             return false;
         }
+
         return true;
     }
 
 
-    private void InstantiateEnemy(Vector3 _pos)
+    private void InstantiateEnemy(GameObject _prefab, Vector3 _pos, Vector3 _target, float _speed)
     {
-        var dist = Vector3.Distance(collisionReticalPosition, _pos);
-        var speed = dist / timeBeforeCollision;
-
-        var enemyBehaviour = Instantiate(enemyPrefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
+        var enemyBehaviour = Instantiate(_prefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
             .GetComponent<EnemyBehaviour>();
-        enemyBehaviour.Speed = speed;
-        enemyBehaviour.Target = collisionReticalPosition;
+        enemyBehaviour.Speed = _speed;
+        enemyBehaviour.Target = _target;
 
         enemyList.Add(enemyBehaviour);
+    }
 
-        Debug.Log("New Enemy ~~~ \n - Pos: " + _pos +
-                  " \n - Dist: " + dist +
-                  " \n Speed: " + speed +
-                  " \n Target: " + collisionReticalPosition);
+
+    private void InstantiateChaserEnemy(GameObject _prefab, Vector3 _pos, Transform _target, float _speed)
+    {
+        var enemyBehaviour = Instantiate(_prefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
+            .GetComponent<ChaserBehavoiur>();
+        enemyBehaviour.Speed = _speed;
+        enemyBehaviour.Target = _target;
+
+        enemyList.Add(enemyBehaviour);
     }
 }

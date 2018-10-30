@@ -14,11 +14,14 @@ public class CollectablesManager : MonoBehaviour
         Bud
     }
 
+    public static bool CollectablesActive = true;
+    [Range(1f, 300f)] public static float CollectableInterval = 15f;
+
     [SerializeField] private List<GameObject> collectablePrefabs = new List<GameObject>();
     [SerializeField] private List<Collectable> collectableList = new List<Collectable>();
 
-    private float timer = 0;
-    private float dropIntervalTime = 5f;
+    private float timer = 0f;
+
 
 
     private void OnEnable()
@@ -34,12 +37,13 @@ public class CollectablesManager : MonoBehaviour
 
     private void Start()
     {
-        timer = dropIntervalTime;
+        timer = CollectableInterval;
     }
 
 
     private void Update()
     {
+        if (!CollectablesActive) return;
         if (timer <= 0)
         {
             // Randomly place around the map.
@@ -58,7 +62,7 @@ public class CollectablesManager : MonoBehaviour
           //  Debug.Log("ID - " + script.ID);
 
             collectableList.Add(script);
-            timer = dropIntervalTime;
+            timer = CollectableInterval;
         }
         else
         {
