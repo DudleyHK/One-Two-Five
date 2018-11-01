@@ -207,8 +207,6 @@ public class EnemyManager : MonoBehaviour
 
                         if (_type == Type.Chaser)
                         {
-                            InstantiateChaserEnemy(chaserEnemyPrefab, worldPos, player.transform, ChaserSpeed);
-
                             Debug.Log("New Chaser Enemy ~~~ \n - Pos: " + worldPos +
                                       " \n Speed: " + ChaserSpeed +
                                       " \n Target: Player");
@@ -299,17 +297,6 @@ public class EnemyManager : MonoBehaviour
     {
         var enemyBehaviour = Instantiate(_prefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
             .GetComponent<EnemyBehaviour>();
-        enemyBehaviour.Speed = _speed;
-        enemyBehaviour.Target = _target;
-
-        enemyList.Add(enemyBehaviour);
-    }
-
-
-    private void InstantiateChaserEnemy(GameObject _prefab, Vector3 _pos, Transform _target, float _speed)
-    {
-        var enemyBehaviour = Instantiate(_prefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
-            .GetComponent<ChaserBehavoiur>();
         enemyBehaviour.Speed = _speed;
         enemyBehaviour.Target = _target;
 
