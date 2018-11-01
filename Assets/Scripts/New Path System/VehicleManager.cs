@@ -9,13 +9,14 @@ public class VehicleManager : MonoBehaviour
 
     public static event TargetRequired targetRequired;
 
-    public List<Vector2[]> Path = new List<Vector2[]>();
+    public List<VehiclePath> Path = new List<VehiclePath>();
     public GameObject EnemyPrefab;
     public SpriteRenderer Map;
     public GameObject Target;
 
-    [HideInInspector] public GameObject PatrolVehicle;
+    [SerializeField] public GameObject PatrolVehicle;
 
+    [SerializeField] private VehiclePath currentPath;
     [SerializeField] private float speed = 1f;
     [SerializeField] private float damping = 150f;
     [SerializeField] private float midpointRadius = 100f;
@@ -25,20 +26,84 @@ public class VehicleManager : MonoBehaviour
     [SerializeField] private Vector2 start, mid, end;
 
     private Vector3 dir;
+    private int index;
+    [SerializeField] private bool stopBike = false;
+    [SerializeField] private float turn = 50f;
 
+    [SerializeField] private float timer = 0f;
+    [SerializeField] private float maxtime = 3f;
+    [SerializeField] private Vector3 target;
+
+    private float temp;
+    private Vector3 currentAngle = Vector3.zero;
+
+
+    private void Start()
+    {
+        currentAngle = transform.eulerAngles;
+    }
 
     private void FixedUpdate()
     {
-        FollowPath();
+        if (timer <= maxtime)
+        {
+            timer += Time.deltaTime;
+            if (PatrolVehicle != null)
+            {
+                if (Vector3.Distance(PatrolVehicle.transform.position, target) <= 500f)
+                {
+                    if (!stopBike)
+                    {
+                        Debug.Log("STOP");
+                        StopCoroutine(StopBike());
+                        StartCoroutine(StopBike());
 
-        // if(PatrolVehicle != null)
-        //     Debug.Log("Position - " + PatrolVehicle.transform.position);
+                        stopBike = true;
+                    }
+                }
+                else
+                {
+                    Debug.Log("MOVING");
+                    var direction = target - PatrolVehicle.transform.position;
+                    direction.y = 0f;
+
+                    Debug.DrawRay(PatrolVehicle.transform.position, direction, Color.green, 4f);
+
+                    var offset = new Vector2(target.x - PatrolVehicle.transform.position.x,
+                        target.z - PatrolVehicle.transform.position.z);
+                    var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
+                    var targetAngle = new Vector3(90f, 0f, angle);
+
+                    currentAngle = new Vector3(
+                        Mathf.LerpAngle(currentAngle.x, targetAngle.x, turn * Time.fixedDeltaTime),
+                        Mathf.LerpAngle(currentAngle.y, targetAngle.y, turn * Time.fixedDeltaTime),
+                        Mathf.LerpAngle(currentAngle.z, targetAngle.z, turn * Time.fixedDeltaTime));
+
+                    PatrolVehicle.transform.eulerAngles = currentAngle;
+                    PatrolVehicle.transform.position += direction.normalized * speed * Time.fixedDeltaTime;
+                }
+            }
+        }
+        else
+        {
+            target = GetRandomPos(Vector3.zero, 4000f);
+            timer = 0f;
+        }
+
+
+        // FollowPath();
+    }
+
+    private Vector3 GetRandomPos(Vector3 _origin, float _radius)
+    {
+        var temp = (Random.insideUnitSphere + _origin) * _radius;
+        return new Vector3(temp.x, 0f, temp.z);
     }
 
 
     public void AddPath(Vector2 _start, Vector2 _mid, Vector2 _end)
     {
-        Path.Add(new[] {_start, _mid, _end});
+        Path.Add(new VehiclePath(_start, _mid, _end));
     }
 
 
@@ -78,35 +143,33 @@ public class VehicleManager : MonoBehaviour
         if (PatrolVehicle == null || Path == null || Path.Count <= 0) return;
         if (complete) return;
 
-        start = Path[0][0];
-        mid = Path[0][1];
-        end = Path[0][2];
+        start = Path[index].Start;
+        mid = Path[index].Mid;
+        end = Path[index].End;
 
-        var pos = BezierCurve.QuadraticBezierCurve(start, mid, end, speed, Time.fixedDeltaTime, out complete,
-            out midway); 
-
+        var pos = BezierCurve.QuadraticBezierCurve(start, mid, end, speed, Time.fixedDeltaTime,
+            out complete,
+            out midway);
 
         if (midway && targetRequired != null)
             targetRequired();
 
-
-        if (complete)
-        {
-            // StopCoroutine(StopBike());
-            // StartCoroutine(StopBike());
-
-            return;
-        }
-
         Rotate();
         PatrolVehicle.transform.position = new Vector3(pos.x, 0f, pos.y);
 
-        // Debug.DrawRay(PatrolVehicle.transform.position, dir, Color.black, 1f);
+        if (complete)
+        {
+            complete = false;
+            index++;
+        }
+
+        Debug.DrawLine(PatrolVehicle.transform.position, new Vector3(Path[index].End.x, 0f, Path[index].End.y),
+            Color.cyan, 1f);
     }
 
     private void Rotate()
     {
-        dir = new Vector3(Path[0][2].x, 0f, Path[0][2].y) - PatrolVehicle.transform.position;
+        dir = new Vector3(Path[0].End.x, 0f, Path[0].End.y) - PatrolVehicle.transform.position;
         dir.y = 0f;
 
         PatrolVehicle.transform.right = dir;
@@ -128,14 +191,16 @@ public class VehicleManager : MonoBehaviour
         while (temp >= 0f)
         {
             temp -= rate * Time.fixedDeltaTime;
-            PatrolVehicle.transform.position += transform.right * temp * Time.fixedDeltaTime;
+            PatrolVehicle.transform.position += PatrolVehicle.transform.right * temp * Time.fixedDeltaTime;
 
-            Debug.DrawLine(PatrolVehicle.transform.position, PatrolVehicle.transform.position + transform.right * 10f,
+            Debug.DrawLine(PatrolVehicle.transform.position,
+                PatrolVehicle.transform.position + PatrolVehicle.transform.right * 10f,
                 Color.green, 10f);
 
             yield return false;
         }
 
+        stopBike = false;
         yield return true;
     }
 

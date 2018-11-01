@@ -66,9 +66,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5551b3306922e8c4898a9314f384ad57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Path:
+  - Start: {x: -4138.8916, y: -3442.356}
+    Mid: {x: -2098.3225, y: 1587.9153}
+    End: {x: -393.28857, y: 1347.1614}
+    Completed: 0
+    MidwayReached: 0
+    Final: 0
   EnemyPrefab: {fileID: 1413566347323386, guid: d52f04ae4a17a5a48850ac82f6bd19e6,
     type: 2}
   Map: {fileID: 0}
   Target: {fileID: 0}
   PatrolVehicle: {fileID: 0}
-  speed: 1
+  currentPath:
+    Start: {x: 0, y: 0}
+    Mid: {x: 0, y: 0}
+    End: {x: 0, y: 0}
+    Completed: 0
+    MidwayReached: 0
+    Final: 0
+  speed: 500
+  damping: 250
+  midpointRadius: 1000
+  complete: 0
+  midway: 0
+  slow: 0
+  start: {x: 0, y: 0}
+  mid: {x: 0, y: 0}
+  end: {x: 0, y: 0}
+  stopBike: 1
+  turn: 10
+  timer: 0.40000004
+  maxtime: 3
+  target: {x: 1438.304, y: 0, z: -689.11115}

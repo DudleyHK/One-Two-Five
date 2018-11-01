@@ -157,16 +157,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114843359987649194, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
-        type: 2}
-      propertyPath: Map
-      value: 
-      objectReference: {fileID: 640986649}
-    - target: {fileID: 114843359987649194, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
-        type: 2}
-      propertyPath: Target
-      value: 
-      objectReference: {fileID: 1133582012}
     - target: {fileID: 114605331145229242, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
       propertyPath: debugText
@@ -178,13 +168,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114843359987649194, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
-      propertyPath: speed
-      value: 0.25
-      objectReference: {fileID: 0}
+      propertyPath: Map
+      value: 
+      objectReference: {fileID: 640986649}
     - target: {fileID: 114843359987649194, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
-      propertyPath: midpointRadius
-      value: 1000
+      propertyPath: Target
+      value: 
+      objectReference: {fileID: 1133582012}
+    - target: {fileID: 114843359987649194, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+        type: 2}
+      propertyPath: PatrolVehicle
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e8d8ebb7a711ee4b878403d2c019c9e, type: 2}

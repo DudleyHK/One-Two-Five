@@ -36,9 +36,9 @@ public class BezierCurve : MonoBehaviour
 		return true;
 	}
 
+	
 	private static bool Midway()
 	{
-		return delta >= .5f;
+		return delta > 0.499f && delta <= 0.5f;
 	}
-	
 }
