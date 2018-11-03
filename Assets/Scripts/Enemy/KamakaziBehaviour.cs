@@ -22,4 +22,26 @@ public class KamakaziBehaviour : EnemyBehaviour
 	{
 		transform.position += direction.normalized * Speed * Time.fixedDeltaTime;
 	}
+
+
+	private void OnCollisionEnter(Collision _other)
+	{
+		var n = _other.collider.name;
+		Debug.Log("OTHER - " + n);
+
+		if (n.Contains("Bud")) return;
+
+		if (n.Contains("Kamakazi"))
+		{
+			if (Main)
+				ExplosionManager.InstantiateExplosion(transform.position);
+			Destroy(gameObject);
+		}
+		else
+		{
+			ExplosionManager.InstantiateExplosion(transform.position);
+			Destroy(gameObject);
+		}
+		
+	}
 }

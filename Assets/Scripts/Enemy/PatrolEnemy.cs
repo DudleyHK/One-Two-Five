@@ -5,32 +5,67 @@ using UnityEngine;
 
 public class PatrolEnemy : MonoBehaviour
 {
-    [HideInInspector] public GameObject PatrolVehicle;
+    public enum PatrolEnemyStates
+    {
+        None,
+        Patrol,
+        Chase
+    }
 
+    [HideInInspector] public GameObject PatrolVehicle;
+    [HideInInspector] public PatrolEnemyStates State;
+
+    public GameObject Player;
     public GameObject EnemyPrefab;
     public SpriteRenderer Map;
 
     [SerializeField] private Vector3 target;
-    
     [SerializeField] private float moveSpeed;
     [SerializeField] private float slowSpeed;
     [SerializeField] private float turnSpeed;
+    [SerializeField] private float chaseSpeed;
+    [SerializeField] private float maxPlayerDistance;
     [SerializeField] private bool stopBike;
-    
+
     [SerializeField] private float maxtime = 3f;
 
     private Vector3 currentAngle;
     private float timer;
 
-    
-    
-    
+
     private void Start()
     {
         currentAngle = transform.eulerAngles;
+
+        StartCoroutine(GenerateVehicle(n => { }));
     }
 
+
     private void FixedUpdate()
+    {
+        State = SetState();
+
+        switch (State)
+        {
+            case PatrolEnemyStates.Patrol:
+                Patrol();
+                break;
+            case PatrolEnemyStates.Chase:
+                timer = maxtime;
+                Chase();
+                break;
+        }
+    }
+
+    private PatrolEnemyStates SetState()
+    {
+        if (Vector3.Distance(PatrolVehicle.transform.position, Player.transform.position) <= maxPlayerDistance)
+            return PatrolEnemyStates.Chase;
+        return PatrolEnemyStates.Patrol;
+    }
+
+
+    private void Patrol()
     {
         if (timer <= maxtime)
         {
@@ -65,6 +100,21 @@ public class PatrolEnemy : MonoBehaviour
             timer = 0f;
         }
     }
+
+
+    private void Chase()
+    {
+        var dir = Player.transform.position - PatrolVehicle.transform.position;
+        dir.y = 0f;
+
+        Debug.DrawRay(PatrolVehicle.transform.position, dir, Color.green, 4f);
+
+        PatrolVehicle.transform.right = dir;
+        PatrolVehicle.transform.Rotate(90f, PatrolVehicle.transform.localRotation.y, 0f);
+
+        PatrolVehicle.transform.position += dir.normalized * chaseSpeed * Time.fixedDeltaTime;
+    }
+
 
     private void Rotate()
     {
@@ -139,5 +189,15 @@ public class PatrolEnemy : MonoBehaviour
 
         stopBike = false;
         yield return true;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        if (PatrolVehicle != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(PatrolVehicle.transform.position, maxPlayerDistance);
+        }
     }
 }

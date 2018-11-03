@@ -37,40 +37,33 @@ public class EnemyManager : MonoBehaviour
         Kamakazi
     }
 
-
     public static bool KamakaziActive = true;
-    public static bool ChaserActive = true;
+
     [Range(0f, 15f)] public static float ChaserSpeed = 5f;
     [Range(1f, 300f)] public static float ChaserInterval = 10f;
-    [Range(1f, 300f)] public static float KamakaziInterval = 5f;
-
-
-    [SerializeField] private Text debugText;
-    [SerializeField] private Text enemySpawnIntervalsText;
+    [Range(1f, 300f)] public static float KamakaziInterval = 15f;
 
     [SerializeField] private GameObject kamakaziEnemyPrefab;
-    [SerializeField] private GameObject chaserEnemyPrefab;
     [SerializeField] private GameObject collisionRetical;
     [SerializeField] private GameObject player;
+    [SerializeField] private Text debugText;
+    [SerializeField] private Text enemySpawnIntervalsText;
+    [SerializeField] private float destroyReticalSeconds;
+    [SerializeField] private bool gate;
 
     [SerializeField] private int attackEnemiesNumber = 2;
     [SerializeField] private float timeBeforeCollision = 5f;
 
 
-    [SerializeField] private bool gate = false;
-
-
-    private List<GameObject> collisionReticalList = new List<GameObject>();
     private List<EnemyBehaviour> enemyList = new List<EnemyBehaviour>();
     private SpriteRenderer reticalSpriteRenderer;
     private SpriteRenderer enemySpriteRenderer;
     private Vector3 collisionReticalPosition;
+    private Sides[] sides;
+
     private float kamakaziTimer = 0f;
     private float chaserTimer = 0f;
-
     private float offset = 50f;
-
-    private Sides[] sides;
 
 
     private void Start()
@@ -87,31 +80,13 @@ public class EnemyManager : MonoBehaviour
             Debug.LogWarning("Warning: enemySpriteRenderer not found!");
         }
 
-        chaserTimer = ChaserInterval;
         kamakaziTimer = KamakaziInterval;
     }
 
 
     private void Update()
     {
-        UpdateChasers();
         UpdateKamakazi();
-    }
-
-
-    private void UpdateChasers()
-    {
-        if (!ChaserActive) return;
-        if (chaserTimer <= 0f)
-        {
-            SpawnEnemies(Type.Chaser, 1);
-            chaserTimer = ChaserInterval;
-            ChaserActive = false;
-        }
-        else
-        {
-            chaserTimer -= Time.deltaTime;
-        }
     }
 
 
@@ -146,11 +121,11 @@ public class EnemyManager : MonoBehaviour
         var pos = Random.Range(0f, 1f) <= 0.3f
             ? player.transform.localPosition
             : Camera.main.ScreenToWorldPoint(new Vector3(x, y, 0f));
-        var clone = Instantiate(collisionRetical, new Vector3(pos.x, 0f, pos.z), Quaternion.Euler(90f, 0f, 0f));
+        var retical = Instantiate(collisionRetical, new Vector3(pos.x, 0f, pos.z), Quaternion.Euler(90f, 0f, 0f));
+        Destroy(retical, destroyReticalSeconds);
 
         collisionReticalPosition = pos;
 
-        collisionReticalList.Add(clone);
 
         debugText.text = "collision point (world position) -" + pos;
         Debug.Log(debugText.text);
@@ -165,10 +140,9 @@ public class EnemyManager : MonoBehaviour
             {
                 var enemyOffsetX = enemySpriteRenderer.sprite.bounds.size.x + offset;
                 var enemyOffsetY = enemySpriteRenderer.sprite.bounds.size.y + offset;
-
                 var screenPos = Vector2.zero;
 
-                Debug.Log("Side 1  - " + sides[0] + " Side 2 - " + sides[1]);
+                bool parentSelected = true;
 
                 for (int i = 0; i < _numberOfEnemies; i++)
                 {
@@ -204,28 +178,19 @@ public class EnemyManager : MonoBehaviour
                     {
                         var worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 0f));
 
-
-                        if (_type == Type.Chaser)
-                        {
-                            Debug.Log("New Chaser Enemy ~~~ \n - Pos: " + worldPos +
-                                      " \n Speed: " + ChaserSpeed +
-                                      " \n Target: Player");
-                        }
-                        else if (_type == Type.Kamakazi)
+                        if (_type == Type.Kamakazi)
                         {
                             var dist = Vector3.Distance(collisionReticalPosition, worldPos);
                             var speed = dist / timeBeforeCollision;
 
-                            InstantiateEnemy(kamakaziEnemyPrefab, worldPos, collisionReticalPosition, speed);
+                            InstantiateEnemy(kamakaziEnemyPrefab, worldPos, collisionReticalPosition, speed,
+                                parentSelected);
+                            parentSelected = false;
 
                             Debug.Log("New Kamakazi Enemy ~~~ \n - Pos: " + worldPos +
                                       " \n - Dist: " + dist +
                                       " \n Speed: " + speed +
                                       " \n Target: " + collisionReticalPosition);
-                        }
-                        else
-                        {
-                            // Do nothing
                         }
                     }
                     else
@@ -293,12 +258,13 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-    private void InstantiateEnemy(GameObject _prefab, Vector3 _pos, Vector3 _target, float _speed)
+    private void InstantiateEnemy(GameObject _prefab, Vector3 _pos, Vector3 _target, float _speed, bool _main)
     {
         var enemyBehaviour = Instantiate(_prefab, new Vector3(_pos.x, 0f, _pos.z), Quaternion.Euler(90f, 0f, 0f))
             .GetComponent<EnemyBehaviour>();
         enemyBehaviour.Speed = _speed;
         enemyBehaviour.Target = _target;
+        enemyBehaviour.Main = _main;
 
         enemyList.Add(enemyBehaviour);
     }

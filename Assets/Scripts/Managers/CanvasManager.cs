@@ -34,7 +34,6 @@ public class CanvasManager : MonoBehaviour
         HUDActive.onValueChanged.AddListener(ToggleHUD);
 
         kamakaziEnemies.onValueChanged.AddListener(ToggleKamakaziEnemies);
-        chaserEnemies.onValueChanged.AddListener(ToggleChaserEnemies);
         collectables.onValueChanged.AddListener(ToggleCollectables);
 
         chaserSpeed.onValueChanged.AddListener(AdjustChaserSpeed);
@@ -83,12 +82,6 @@ public class CanvasManager : MonoBehaviour
     private void ToggleKamakaziEnemies(bool _isOn)
     {
         EnemyManager.KamakaziActive = _isOn;
-    }
-
-
-    private void ToggleChaserEnemies(bool _isOn)
-    {
-        EnemyManager.ChaserActive = _isOn;
     }
 
 

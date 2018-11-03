@@ -20,7 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4315659109343136}
   - component: {fileID: 114605331145229242}
-  - component: {fileID: 114843359987649194}
+  - component: {fileID: 114368790716601414}
+  - component: {fileID: 114430630690847348}
+  - component: {fileID: 114129748328635222}
+  - component: {fileID: 114117081243366326}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -41,6 +44,79 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114117081243366326
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0648238e6f4b1eb40a8414441b3a0ff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExplosionPrefab: {fileID: 1249081963266504, guid: 76fea35ad842c85488e2fc048e453f9f,
+    type: 2}
+--- !u!114 &114129748328635222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5551b3306922e8c4898a9314f384ad57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PatrolVehicle: {fileID: 0}
+  State: 2
+  Player: {fileID: 0}
+  EnemyPrefab: {fileID: 1413566347323386, guid: d52f04ae4a17a5a48850ac82f6bd19e6,
+    type: 2}
+  Map: {fileID: 0}
+  target: {x: 445.5281, y: 0, z: 2368.0288}
+  moveSpeed: 350
+  slowSpeed: 350
+  turnSpeed: 10
+  chaseSpeed: 350
+  maxPlayerDistance: 1000
+  stopBike: 1
+  maxtime: 3
+--- !u!114 &114368790716601414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632bc1f02c82a8e45a373be783250eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugText: {fileID: 0}
+  enemySpawnIntervalsText: {fileID: 0}
+  kamakaziEnemyPrefab: {fileID: 1413566347323386, guid: 26672b4105da40040894a92115fd421b,
+    type: 2}
+  collisionRetical: {fileID: 1121803163297312, guid: ad13c551162b3134bb72f76aba69922b,
+    type: 2}
+  player: {fileID: 0}
+  attackEnemiesNumber: 2
+  timeBeforeCollision: 3.5
+  gate: 0
+--- !u!114 &114430630690847348
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b250df5c34630324089b9317c05e0a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectablePrefabs:
+  - {fileID: 1377601854721476, guid: 155e28c9c1bc2a744bbeed34735065ad, type: 2}
+  collectableList: []
 --- !u!114 &114605331145229242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -55,24 +131,3 @@ MonoBehaviour:
   debugText: {fileID: 0}
   startPos: {x: 0, y: 0}
   direction: {x: 0, y: 0}
---- !u!114 &114843359987649194
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1421810993234890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5551b3306922e8c4898a9314f384ad57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PatrolVehicle: {fileID: 0}
-  EnemyPrefab: {fileID: 1413566347323386, guid: d52f04ae4a17a5a48850ac82f6bd19e6,
-    type: 2}
-  Map: {fileID: 0}
-  target: {x: 1438.304, y: 0, z: -689.11115}
-  moveSpeed: 500
-  slowSpeed: 350
-  turnSpeed: 10
-  stopBike: 1
-  maxtime: 3
