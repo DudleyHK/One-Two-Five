@@ -385,7 +385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1452440193649358
 GameObject:
   m_ObjectHideFlags: 1
@@ -1128,7 +1128,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114220541731663950
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2288,10 +2288,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 224390790994965226}
   m_HandleRect: {fileID: 224401278561211400}
   m_Direction: 0
-  m_MinValue: 1
+  m_MinValue: 0
   m_MaxValue: 15
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 8.51
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

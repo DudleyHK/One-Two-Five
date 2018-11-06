@@ -29,11 +29,11 @@ public class KamakaziBehaviour : EnemyBehaviour
 		var n = _other.collider.name;
 		Debug.Log("OTHER - " + n);
 
-		if (n.Contains("Bud")) return;
+		if (n.Contains(ObjectNames.Bud)) return;
 
-		if (n.Contains("Kamakazi"))
+		if (n.Contains(ObjectNames.Kamakazi))
 		{
-			if (Main)
+			//if (Main)
 				ExplosionManager.InstantiateExplosion(transform.position);
 			Destroy(gameObject);
 		}

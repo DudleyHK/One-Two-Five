@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour
 
     [Range(0f, 15f)] public static float ChaserSpeed = 5f;
     [Range(1f, 300f)] public static float ChaserInterval = 10f;
-    [Range(1f, 300f)] public static float KamakaziInterval = 15f;
+    [Range(1f, 300f)] public static float KamakaziInterval = 5f;
 
     [SerializeField] private GameObject kamakaziEnemyPrefab;
     [SerializeField] private GameObject collisionRetical;
@@ -185,6 +185,7 @@ public class EnemyManager : MonoBehaviour
 
                             InstantiateEnemy(kamakaziEnemyPrefab, worldPos, collisionReticalPosition, speed,
                                 parentSelected);
+                            
                             parentSelected = false;
 
                             Debug.Log("New Kamakazi Enemy ~~~ \n - Pos: " + worldPos +
@@ -199,6 +200,11 @@ public class EnemyManager : MonoBehaviour
                         i--;
                     }
                 }
+
+                var index = enemyList.Count - 1;
+                enemyList[index].Partner = enemyList[index - 1].gameObject;
+                enemyList[index - 1].Partner = enemyList[index].gameObject;
+
             }
         }));
     }

@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114430630690847348}
   - component: {fileID: 114129748328635222}
   - component: {fileID: 114117081243366326}
+  - component: {fileID: 114958021485733784}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -93,16 +94,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632bc1f02c82a8e45a373be783250eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugText: {fileID: 0}
-  enemySpawnIntervalsText: {fileID: 0}
   kamakaziEnemyPrefab: {fileID: 1413566347323386, guid: 26672b4105da40040894a92115fd421b,
     type: 2}
   collisionRetical: {fileID: 1121803163297312, guid: ad13c551162b3134bb72f76aba69922b,
     type: 2}
   player: {fileID: 0}
-  attackEnemiesNumber: 2
-  timeBeforeCollision: 3.5
+  debugText: {fileID: 0}
+  enemySpawnIntervalsText: {fileID: 0}
+  destroyReticalSeconds: 3
   gate: 0
+  attackEnemiesNumber: 2
+  timeBeforeCollision: 1.5
 --- !u!114 &114430630690847348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -131,3 +133,15 @@ MonoBehaviour:
   debugText: {fileID: 0}
   startPos: {x: 0, y: 0}
   direction: {x: 0, y: 0}
+--- !u!114 &114958021485733784
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421810993234890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7396979cc3f843c4781612d784d44218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  adButton: {fileID: 0}

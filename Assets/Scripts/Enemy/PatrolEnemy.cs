@@ -12,7 +12,7 @@ public class PatrolEnemy : MonoBehaviour
         Chase
     }
 
-    [HideInInspector] public GameObject PatrolVehicle;
+    [HideInInspector] public static GameObject PatrolVehicle;
     [HideInInspector] public PatrolEnemyStates State;
 
     public GameObject Player;

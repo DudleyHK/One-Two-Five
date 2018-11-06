@@ -12,7 +12,7 @@ public class PlayerCollect : MonoBehaviour
     {
         var script = _other.gameObject.GetComponent<Collectable>();
      
-        if (_other.gameObject.CompareTag("Collectable"))
+        if (_other.gameObject.CompareTag(ObjectNames.Collectable))
         {
             if (script == null)
             {
