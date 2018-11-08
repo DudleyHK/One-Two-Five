@@ -157,20 +157,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1421810993234890, guid: 4e8d8ebb7a711ee4b878403d2c019c9e, type: 2}
-      propertyPath: m_Name
-      value: Game Manager
-      objectReference: {fileID: 0}
-    - target: {fileID: 114129748328635222, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+    - target: {fileID: 114605331145229242, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
-      propertyPath: Player
+      propertyPath: debugText
       value: 
-      objectReference: {fileID: 1133582012}
-    - target: {fileID: 114129748328635222, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
-        type: 2}
-      propertyPath: Map
-      value: 
-      objectReference: {fileID: 950100878}
+      objectReference: {fileID: 1711330147}
     - target: {fileID: 114368790716601414, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
       propertyPath: player
@@ -186,20 +177,19 @@ Prefab:
       propertyPath: enemySpawnIntervalsText
       value: 
       objectReference: {fileID: 1736701398}
-    - target: {fileID: 114605331145229242, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+    - target: {fileID: 114129748328635222, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
-      propertyPath: debugText
+      propertyPath: Player
       value: 
-      objectReference: {fileID: 1711330147}
-    - target: {fileID: 114958021485733784, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
+      objectReference: {fileID: 1133582012}
+    - target: {fileID: 114129748328635222, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
         type: 2}
-      propertyPath: adButton
+      propertyPath: Map
       value: 
-      objectReference: {fileID: 1737758076}
-    - target: {fileID: 114368790716601414, guid: 4e8d8ebb7a711ee4b878403d2c019c9e,
-        type: 2}
-      propertyPath: destroyReticalSeconds
-      value: 1.25
+      objectReference: {fileID: 950100878}
+    - target: {fileID: 1421810993234890, guid: 4e8d8ebb7a711ee4b878403d2c019c9e, type: 2}
+      propertyPath: m_Name
+      value: Game Manager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e8d8ebb7a711ee4b878403d2c019c9e, type: 2}
@@ -306,11 +296,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114689871473851122, guid: 851cd62d61063264ebd8b9b14fd090c7,
-        type: 2}
-      propertyPath: pauseMenu
-      value: 
-      objectReference: {fileID: 1805609433}
     - target: {fileID: 114872252857815168, guid: 851cd62d61063264ebd8b9b14fd090c7,
         type: 2}
       propertyPath: mainCamera
@@ -321,6 +306,11 @@ Prefab:
       propertyPath: debugText
       value: 
       objectReference: {fileID: 918090238}
+    - target: {fileID: 114689871473851122, guid: 851cd62d61063264ebd8b9b14fd090c7,
+        type: 2}
+      propertyPath: pauseMenu
+      value: 
+      objectReference: {fileID: 1805609433}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 851cd62d61063264ebd8b9b14fd090c7, type: 2}
   m_IsPrefabAsset: 0
@@ -589,12 +579,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1069808301}
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
---- !u!114 &1737758076 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114983751735293500, guid: c82a55ade9d99754482fce59971968ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 1805609432}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &1805609432
 Prefab:
   m_ObjectHideFlags: 0

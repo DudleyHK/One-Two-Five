@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,35 +8,23 @@ public class PlayerMovement : MonoBehaviour
 {
     public bool move = false;
     public bool slow = false;
-    public float speed = 15f;
-    public float damping = 5f;
-    public float turn = 5f;
+    public float maxSpeed = 500f;
+    public float accelerationRate = 1000f;
+    public float deccelerationRate = 500f;
+    public float damping = 150f;
+    public float turn = 150f;
 
-    [SerializeField]
-    enum Direction
-    {
-        None,
-        Forward,
-        Reverse
-    }
-
-    [SerializeField] Camera mainCamera;
-    [SerializeField] Text debugText;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private Text debugText;
     [SerializeField] private float deadzone = 5f;
+    [SerializeField] private float curSpeed;
+
 
     private Vector3 ppTargetPos;
     private Vector3 wpTargetPos;
-    
+
     private Vector3 currentAngle = Vector3.zero;
-
     private ushort touchEndCount = 0;
-    
-
-
-    private void Start()
-    {
-        currentAngle = transform.eulerAngles;
-    }
 
 
     private void OnEnable()
@@ -53,8 +39,13 @@ public class PlayerMovement : MonoBehaviour
         InputManager.handleInput -= HandleInput;
         InputManager.handleMouseInput -= HandleMouseInput;
     }
-    
-    
+
+
+    private void Start()
+    {
+        currentAngle = transform.eulerAngles;
+    }
+
 
     private void FixedUpdate()
     {
@@ -64,29 +55,25 @@ public class PlayerMovement : MonoBehaviour
 
             if (Vector3.Distance(transform.position, wpTargetPos) < deadzone)
             {
-               // StartCoroutine(DelayCoroutine(StopBike(), 2f));
+                // Do nothing.
             }
             else
             {
                 Rotate();
-                Movement();
+                Movement( curSpeed + accelerationRate * Time.fixedDeltaTime);
             }
         }
-
-        if (slow)
+        else
         {
-            StopCoroutine(StopBike());
-            StartCoroutine(StopBike());
-
-            slow = false;
+            Movement(curSpeed - deccelerationRate * Time.fixedDeltaTime);
         }
     }
 
-    private void Movement()
+
+    private void Movement(float _delta)
     {
-        Debug.Log("CAR MOVING");
-        
-        transform.position += transform.right * speed * Time.fixedDeltaTime;
+        curSpeed = Mathf.Clamp(_delta, 0f, maxSpeed);
+        transform.position += transform.right * curSpeed * Time.fixedDeltaTime;
     }
 
 
@@ -104,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         transform.eulerAngles = currentAngle;
     }
 
-    
+
     private IEnumerator DelayCoroutine(IEnumerator _func, float _t)
     {
         Debug.Log("Wating to Delay Func");
@@ -121,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
     {
         var temp = damping;
         var rate = temp / 2f;
-        
+
         while (temp >= 0f)
         {
             temp -= rate * Time.fixedDeltaTime;
@@ -129,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
             yield return false;
         }
+
         yield return true;
     }
 

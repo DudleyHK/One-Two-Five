@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4028974334966208}
   - component: {fileID: 212084313112600624}
   - component: {fileID: 54291817641402270}
-  - component: {fileID: 114280620760748540}
   m_Layer: 0
   m_Name: Chaser Enemy
   m_TagString: Untagged
@@ -57,17 +56,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &114280620760748540
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1413566347323386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f98ad03084a6b147a521b5c3b0f66da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &212084313112600624
 SpriteRenderer:
   m_ObjectHideFlags: 1

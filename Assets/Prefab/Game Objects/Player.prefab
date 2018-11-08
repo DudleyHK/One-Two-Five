@@ -245,12 +245,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: 0
   slow: 0
-  speed: 500
+  maxSpeed: 500
+  accelerationRate: 1000
+  deccelerationRate: 500
   damping: 150
   turn: 150
   mainCamera: {fileID: 0}
   debugText: {fileID: 0}
-  deadzone: 5
+  deadzone: 50
+  curSpeed: 0
 --- !u!114 &114904046837067892
 MonoBehaviour:
   m_ObjectHideFlags: 1

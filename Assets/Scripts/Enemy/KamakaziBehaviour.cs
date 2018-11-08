@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class KamakaziBehaviour : EnemyBehaviour
 {
+	public delegate void KamakaziSmashPlayer();
+	public static event KamakaziSmashPlayer kamakaziSmashPlayer;
+
+	
+	
 	private void Start()
 	{
 		direction = Target - transform.position;
@@ -24,24 +29,43 @@ public class KamakaziBehaviour : EnemyBehaviour
 	}
 
 
-	private void OnCollisionEnter(Collision _other)
+	private void Update()
 	{
-		var n = _other.collider.name;
-		Debug.Log("OTHER - " + n);
-
-		if (n.Contains(ObjectNames.Bud)) return;
-
-		if (n.Contains(ObjectNames.Kamakazi))
+		if (Partner != null)
 		{
-			//if (Main)
-				ExplosionManager.InstantiateExplosion(transform.position);
-			Destroy(gameObject);
+			if (Distance(transform.position, Partner.transform.position))
+			{
+				ExplosionAndDestruction();
+			}
 		}
-		else
+
+		if (PatrolEnemy.PatrolVehicle != null)
 		{
-			ExplosionManager.InstantiateExplosion(transform.position);
-			Destroy(gameObject);
+			if (Distance(transform.position, PatrolEnemy.PatrolVehicle.transform.position))
+			{
+				ExplosionAndDestruction();
+			}
 		}
-		
+
+		if (PlayerData.PlayerObject != null)
+		{
+			if (Vector3.Distance(transform.position, PlayerData.PlayerObject.transform.position) <= 200f)
+			{
+				ExplosionAndDestruction();
+			}
+		}
+	}
+
+
+	private void ExplosionAndDestruction()
+	{
+		ExplosionManager.InstantiateExplosion(transform.position);
+		Destroy(gameObject);
+	}
+
+
+	private bool Distance(Vector3 _a, Vector3 _b)
+	{
+		return Vector3.Distance(_a, _b) <= 100f;
 	}
 }

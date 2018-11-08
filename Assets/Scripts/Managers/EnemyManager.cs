@@ -9,7 +9,7 @@ using UnityEngine.UI;
 - Select two rand positions offscreen.
 - Add ray collision test before instantiation, repeat previous step if not.   
 - Enemies drive from random off screen positions (inc. a set offset position on x and y)
-- Get speed which both bikes.
+- Get maxSpeed which both bikes.
 - Add screen shake on collision
 - Explosion Animation
 - SFX
@@ -42,6 +42,8 @@ public class EnemyManager : MonoBehaviour
     [Range(0f, 15f)] public static float ChaserSpeed = 5f;
     [Range(1f, 300f)] public static float ChaserInterval = 10f;
     [Range(1f, 300f)] public static float KamakaziInterval = 5f;
+    
+    public static List<EnemyBehaviour> EnemyList = new List<EnemyBehaviour>();
 
     [SerializeField] private GameObject kamakaziEnemyPrefab;
     [SerializeField] private GameObject collisionRetical;
@@ -55,7 +57,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float timeBeforeCollision = 5f;
 
 
-    private List<EnemyBehaviour> enemyList = new List<EnemyBehaviour>();
+    
     private SpriteRenderer reticalSpriteRenderer;
     private SpriteRenderer enemySpriteRenderer;
     private Vector3 collisionReticalPosition;
@@ -126,9 +128,7 @@ public class EnemyManager : MonoBehaviour
 
         collisionReticalPosition = pos;
 
-
         debugText.text = "collision point (world position) -" + pos;
-        Debug.Log(debugText.text);
     }
 
 
@@ -188,22 +188,22 @@ public class EnemyManager : MonoBehaviour
                             
                             parentSelected = false;
 
-                            Debug.Log("New Kamakazi Enemy ~~~ \n - Pos: " + worldPos +
-                                      " \n - Dist: " + dist +
-                                      " \n Speed: " + speed +
-                                      " \n Target: " + collisionReticalPosition);
+                            //Debug.Log("New Kamakazi Enemy ~~~ \n - Pos: " + worldPos +
+                            //          " \n - Dist: " + dist +
+                            //          " \n Speed: " + speed +
+                            //          " \n Target: " + collisionReticalPosition);
                         }
                     }
                     else
                     {
-                        Debug.Log("Position (" + screenPos + ") NOT offscreen.");
+                        //Debug.Log("Position (" + screenPos + ") NOT offscreen.");
                         i--;
                     }
                 }
 
-                var index = enemyList.Count - 1;
-                enemyList[index].Partner = enemyList[index - 1].gameObject;
-                enemyList[index - 1].Partner = enemyList[index].gameObject;
+                var index = EnemyList.Count - 1;
+                EnemyList[index].Partner = EnemyList[index - 1].gameObject;
+                EnemyList[index - 1].Partner = EnemyList[index].gameObject;
 
             }
         }));
@@ -272,6 +272,6 @@ public class EnemyManager : MonoBehaviour
         enemyBehaviour.Target = _target;
         enemyBehaviour.Main = _main;
 
-        enemyList.Add(enemyBehaviour);
+        EnemyList.Add(enemyBehaviour);
     }
 }

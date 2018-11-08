@@ -69,7 +69,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5551b3306922e8c4898a9314f384ad57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PatrolVehicle: {fileID: 0}
   State: 2
   Player: {fileID: 0}
   EnemyPrefab: {fileID: 1413566347323386, guid: d52f04ae4a17a5a48850ac82f6bd19e6,
@@ -101,7 +100,7 @@ MonoBehaviour:
   player: {fileID: 0}
   debugText: {fileID: 0}
   enemySpawnIntervalsText: {fileID: 0}
-  destroyReticalSeconds: 3
+  destroyReticalSeconds: 1.25
   gate: 0
   attackEnemiesNumber: 2
   timeBeforeCollision: 1.5
@@ -144,4 +143,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7396979cc3f843c4781612d784d44218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adButton: {fileID: 0}

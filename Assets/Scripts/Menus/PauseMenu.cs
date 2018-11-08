@@ -38,7 +38,7 @@ public class PauseMenu : MonoBehaviour
         
         continueButton.DisplayAd = _displayAd;
 
-        if (!_active) 
+        if (_displayAd) 
             StartCoroutine(PlayerHit.SetInvinsible());
     }
 
@@ -51,6 +51,8 @@ public class PauseMenu : MonoBehaviour
     
     public void ReturnToMenu()
     {
+        PauseGame(false);
+        
         SceneManager.LoadScene(0);
     }
     
