@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PoolObject
 {
     public bool move = false;
     public bool slow = false;
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 currentAngle = Vector3.zero;
     private ushort touchEndCount = 0;
-
+    
 
     private void OnEnable()
     {

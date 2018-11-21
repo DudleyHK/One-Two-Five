@@ -8,12 +8,14 @@ public static class EventManager
     public struct Events
     {
         public static string Collision = "event_collision";
+        public static string RegisterObject = "event_reg_object";
     }
 
 
     private static Dictionary<string, Delegate> EventList = new Dictionary<string, Delegate>
     {
-        {Events.Collision, null}
+        { Events.Collision, null },
+        { Events.RegisterObject, null }
     };
 
 

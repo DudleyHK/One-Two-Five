@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class CollisionManager
 {
-	private List<Object> objectList;
+	private List<PoolObject> objectList;
 	private bool init = false;
 
 	
-	public bool Initialise(ref List<Object> _objects)
+	public bool Initialise(ref List<PoolObject> _objects)
 	{
 		if (init) return false;
 
