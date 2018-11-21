@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class PlayerMovement : MonoBehaviour
 {
     public bool move = false;
@@ -44,11 +43,23 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         currentAngle = transform.eulerAngles;
+
+        EventManager.AddListener(EventManager.Events.Collision, new Action<int, int, string>(Collide));
+
+    }
+
+    private void Collide(int i, int b, string s)
+    {
+        Debug.Log("Collision Detected");
     }
 
 
     private void FixedUpdate()
     {
+        EventManager.Trigger(EventManager.Events.Collision, new {i = 10, b = 5, s = "Player"});
+        
+        
+        
         if (move)
         {
             wpTargetPos = Camera.main.ScreenToWorldPoint(ppTargetPos);
