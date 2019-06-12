@@ -16,7 +16,7 @@ public class PlayerMovement : PoolObject
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Text debugText;
     [SerializeField] private float deadzone = 5f;
-    [SerializeField] private float curSpeed;
+    [SerializeField] public float curSpeed;
 
 
     private Vector3 ppTargetPos;
@@ -56,7 +56,7 @@ public class PlayerMovement : PoolObject
 
     private void FixedUpdate()
     {
-        EventManager.Trigger(EventManager.Events.Collision, new {i = 10, b = 5, s = "Player"});
+      //  EventManager.Trigger(EventManager.Events.Collision, new {i = 10, b = 5, s = "Player"});
         
         
         
